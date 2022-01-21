@@ -13,8 +13,8 @@ Source: https://www.radarbox.com/api/documentation#operation/search
     "flights": // array of flights [
         {
         
-            "aircraftModeS": "A1E5B3", # Aircraft Mode-S Hex code, unique ICAO 24-bit address (part of the aircraft's Certificate of Registration) used to identify the aircraft and broadcast by its Mode-S transponder.
-            "aircraftRegistration": "N221LA", // Tail number
+            "aircraftModeS": Aircraft Mode-S Hex code, unique ICAO 24-bit address (part of the aircraft's Certificate of Registration) used to identify the aircraft and broadcast by its Mode-S transponder.
+            "aircraftRegistration": Tail number
             "aircraftType": "AS50", // ICAO code
             "altitude": 550, // altitude(feet)
             "arrAirportCity": "Hawthorne",
