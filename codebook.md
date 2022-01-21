@@ -3,7 +3,7 @@ Source: https://www.radarbox.com/api/documentation#operation/search
 
 
 
-### "field": example // explanation
+### Format: "field": first entry ("string" or numeric) // explanation
 
 
 "comment": "Successfully fetched details for 2569 flights", // info about operation
