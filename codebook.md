@@ -1,10 +1,15 @@
 # Codebook
 Source: https://www.radarbox.com/api/documentation#operation/search
 
+
+
 "field": example // explanation
 
+
 "comment": "Successfully fetched details for 2569 flights", // info about operation
+
     "cost": 2569, // cost of the operation, except this number is clearly inaccurate, as it equals the # of flights
+    
     "flights": // array of flights [
         {
         
