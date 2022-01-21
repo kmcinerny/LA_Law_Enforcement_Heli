@@ -52,7 +52,7 @@ Source: https://www.radarbox.com/api/documentation#operation/search
                     "latitude": 34.1882427668167, 
                     "longitude": -118.425178527832,
                     "source": "ADSB", // Source of the position data (ADSB, MLAT, ASDI, OCEA, SATE, HFDL, ASDEX)
-                    "squawkCode": null, // Squawk code, 4-digit octal number that is assigned by air traffic control. The pilots will enter the assigned squawk code into the aircraft's transponder.
+                    "squawkCode": null, // Squawk code, 4-digit octal number that is assigned by air traffic control. The pilots will enter the assigned squawk code into the aircraft's transponder. Look for emergency squawk codes.
                     "timestamp": "2020-09-30T22:17:20.366+0000", // string <date-time> (Time the position was recorded)
                     "verticalRate": null // Verical rate (ft/min)
                 },
