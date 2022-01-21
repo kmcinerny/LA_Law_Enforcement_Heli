@@ -13,14 +13,14 @@ Source: https://www.radarbox.com/api/documentation#operation/search
     "flights": // array of flights [
         {
         
-            "aircraftModeS": **Aircraft Mode-S Hex code, unique ICAO 24-bit address (part of the aircraft's Certificate of Registration) used to identify the aircraft and broadcast by its Mode-S transponder.**
+            "aircraftModeS": Aircraft Mode-S Hex code, unique ICAO 24-bit address (part of the aircraft's Certificate of Registration) used to identify the aircraft and broadcast by its Mode-S transponder.
             "aircraftRegistration": Tail number
             "aircraftType": "AS50", // ICAO code
             "altitude": 550, // altitude(feet)
             "arrAirportCity": "Hawthorne",
             "arrAirportCountry": "United States",
-            "arrAirportIata": "HHR", // **arriving airport IATA code, three-letter geocode designating many airports.**
-            "arrAirportIcao": "KHHR", // **arriving airport ICAO code, a four-letter code designating aerodromes around the world.**
+            "arrAirportIata": "HHR", // arriving airport IATA code, three-letter geocode designating many airports.
+            "arrAirportIcao": "KHHR", // arriving airport ICAO code, a four-letter code designating aerodromes around the world.
             "arrAirportLatitude": 33.9228,
             "arrAirportLongitude": -118.335,
             "arrAirportName": "Jack Northrop Field Hawthorne Municipal Airport",
