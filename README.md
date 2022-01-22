@@ -21,6 +21,8 @@ Los Angeles County supports the largest fleet of law enforcement helicopters in 
 | ----: | :---- |
 | [🤔](# "Ideas") | Matyos Kidane of Stop LAPD Spying |
 
+(For a key to the contribution emoji or more info on this format, check out [“All Contributors.”](https://allcontributors.org/docs/en/emoji-key))
+
 This work both builds out of and supports a larger project by LA Birdwatchers (Suzanne Kite, Aljumaine Gayle, Nicholas Shapiro and Ladan Mohamed Siad) See http://ikgallery.ca/va_contingentsystems/ 
 
 ![First exibition, fall 2021](https://github.com/Carceral-Ecologies/LA_Law_Enforcement_Heli/blob/main/20211001IKG_DSC-9747-web-1.jpg)
