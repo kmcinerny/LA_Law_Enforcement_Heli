@@ -43,3 +43,5 @@ if __name__ == '__main__':
     json_data = json.load(f)
     df = json_to_dataframe(json_data)
     df.to_csv("flight_csv.csv", sep=',', encoding='utf-8')
+
+    # run  in terminal for conversion to cvs 
