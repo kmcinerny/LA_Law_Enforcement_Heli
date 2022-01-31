@@ -19,7 +19,8 @@ Los Angeles County supports the largest fleet of law enforcement helicopters in 
 <!-- ALL-Advisors-LIST:START -->
 | Advisor | Name |
 | ----: | :---- |
-| [🤔](# "Ideas") | Matyos Kidane of Stop LAPD Spying |
+| [🤔](# "Ideas") | Matyos Kidane of [Stop LAPD Spying](https://twitter.com/stoplapdspying) |
+| [🤔](# "Ideas") | Gina Poe of the [Poe Sleep and Memory Lab](https://poe-sleeplab.weebly.com/)|
 
 (For a key to the contribution emoji or more info on this format, check out [“All Contributors.”](https://allcontributors.org/docs/en/emoji-key))
 
