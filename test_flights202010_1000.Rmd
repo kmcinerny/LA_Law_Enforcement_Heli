@@ -1,0 +1,112 @@
+---
+title: "test_202010flights_1000"
+author: '605194735'
+date: "1/27/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=FALSE, warning = FALSE)
+```
+
+```{r packages, include=FALSE}
+# loading packages I might need
+library(plyr)
+library(tidyverse)
+library(ggplot2)
+library(mosaic)
+library(car)
+library(gmodels)
+library(readxl)
+library(lubridate) #to separate date/time
+library(plotly) #interactive graphics
+```
+
+
+```{r data}
+# loading dataset
+
+flights202010_1000 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/202010flights_1000.csv")
+```
+
+## Summary Stats
+
+```{r summary altitude}
+favstats(flights202010_1000$flights.positions.altitude)
+```
+
+Thoughts: the min altitude of 250 ft is very low-- even lower than the departing airport altitude of 550 feet.
+I'm curious: Is there a way to graphically see the path of how altitudes change? Or mainly just map it? Curious whether the lower altitudes are concentrated in takeoff/landing or if they hover over certain neighborhoods…
+
+Is there a limit on how high or low helicopters should fly? How does the median of 850 ft impact noise levels, compared to min/ max?
+
+Which law enforcement agency's helicopters are flying the lowest? (I hypothesize sherrifs, but who knows)
+
+Then later on.... Want to look at where in the county they fly the lowest vs. highest.
+
+Also, what should I do about missing values?
+Is the max a true max or is it an outlier that I should exclude?
+
+
+
+
+```{r summary speed}
+favstats(flights202010_1000$flights.positions.groundSpeed)
+
+```
+Again, is the max a typo?
+
+
+## Parse date/time
+```{r describe date-time}
+
+str(flights202010_1000)
+```
+
+
+```{r parse date-time}
+
+d <- as.POSIXct(flights202010_1000$flights.positions.timestamp, format="%Y-%m-%d %H:%M:%S")
+flights202010_1000$flights.positions.date_km <- format(d, format="%Y-%m-%d")
+flights202010_1000$flights.positions.time_km <- format(d, format="%H:%M:%S")
+flights202010_1000$flights.positions.hour_km <- format(d, format="%H")
+
+View(flights202010_1000)
+```
+
+
+
+Graph altitude over time
+group by the call sign
+
+```{r altitude over time}
+p <- ggplot(data=flights202010_1000, aes(x=flights.positions.timestamp, y=flights.positions.altitude, group=flights.callsign)) + geom_line() 
+p
+
+```
+
+## Interactive plot
+
+```{r interactive}
+
+fig <- plot_ly(flights202010_1000, x= ~flights.positions.timestamp)
+fig <- fig %>% add_trace(y= ~flights.positions.altitude, name= 'altitude', mode= 'lines')
+
+fig
+```
+
+# Time of day
+
+```{r time}
+
+# how to show count of points per hour of day? gonna have to do this with a bigger dataset w/ different flights
+
+timecounts <- table(flights202010_1000$flights.positions.time_km)
+barplot(timecounts, main="Frequent Flight Times", xlab="Time of day")
+```
+
+```{r}
+p <- ggplot(data=flights202010_1000, aes(x=flights.positions.hour_km, group=flights.aircraftRegistration)) + geom_bar() 
+p
+```
+
