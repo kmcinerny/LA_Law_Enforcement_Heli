@@ -26,7 +26,7 @@ library(plotly) #interactive graphics
 ```{r data}
 # loading dataset
 
-flights202010_1000 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/202010flights_1000.csv")
+flights202010_1000 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/flights202010_1000.csv")
 ```
 
 ## Summary Stats

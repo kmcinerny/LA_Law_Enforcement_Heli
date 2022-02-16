@@ -20,17 +20,15 @@ library(gmodels)
 library(readxl)
 library(lubridate) #to separate date/time
 library(plotly) #interactive graphics
+library(ggmap)
 ```
 
 
 ```{r data}
 # loading dataset
 
-flights202010 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/202010flights.csv")
+flights202010 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/flights10.20.csv")
 
-flights202009 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/flights202009.csv")
-
-View(flights202009)
 ```
 
 # Filter out unwanted fields
@@ -38,7 +36,7 @@ View(flights202009)
 ```{r new dataset}
 # cleaning dataset by removing columns
 
-new.flights202010 <- subset(flights202010, select= -c(comment, success, cost, flights.aircraftModeS, flights.callsign, flights.depAirportIata, flights.arrAirportIata, flights.created, flights.updated, flights.source, flights.positions.source, flights.positions.squawkCode, flights.squawkCode, flights.scheduledDeparture, flights.aircraftTypeDescription, flights.estimatedArrival))
+new.flights10.20 <- subset(flights202010, select= -c(comment, success, cost, flights.aircraftModeS, flights.callsign, flights.depAirportIata, flights.arrAirportIata, flights.updated, flights.source, flights.positions.source, flights.positions.squawkCode, flights.squawkCode, flights.scheduledDeparture, flights.aircraftTypeDescription, flights.estimatedArrival))
 # View(new.flights202010)
 
 #export
@@ -50,14 +48,14 @@ new.flights202010 <- subset(flights202010, select= -c(comment, success, cost, fl
 ```{r unique dep states}
 # unique(new.flights202010$flights.depAirportState)
 
-new.flights202010 %>% count(flights.depAirportState)
+new.flights10.20 %>% count(flights.depAirportState)
 ```
 Will have to recode CA--> also maybe a way to geocode so that missing cities can be filled in. or automatically fill in these details based on airport.
 
 # Recode States
 ```{r recode states}
 
-new.flights202010$flights.depAirportState <- recode(new.flights202010$flights.depAirportState, "'CALIFORNIA'= 'California'")
+new.flights10.20$flights.depAirportState <- recode(new.flights10.20$flights.depAirportState, "'CALIFORNIA'= 'California'")
 ```
 
 
@@ -66,14 +64,14 @@ new.flights202010$flights.depAirportState <- recode(new.flights202010$flights.de
 ```{r unique dep cities}
 # unique(new.flights202010$flights.depAirportCity)
 
-new.flights202010 %>% count(flights.depAirportCity)
+new.flights10.20 %>% count(flights.depAirportCity)
 ```
 
 
 # Summary Stats
 
 ```{r summary altitude}
-favstats(new.flights202010$flights.positions.altitude)
+favstats(new.flights10.20$flights.positions.altitude)
 ```
 
 Thoughts: the min altitude of 250 ft is very low-- even lower than the departing airport altitude of 550 feet.
@@ -89,34 +87,62 @@ Also, what should I do about missing values?
 Is the max a true max or is it an outlier that I should exclude?
 
 ```{r summary speed}
-favstats(new.flights202010$flights.positions.groundSpeed)
+favstats(new.flights10.20$flights.positions.groundSpeed)
 
 ```
 
 Identifying outliers
 
 
+## Change timezone
+
+```{r UTC to PST}
+
+y <- ymd_hms(new.flights10.20$flights.positions.timestamp)
+
+new.flights10.20$flights.positions.PSTtimestamp <- with_tz(y)
+
+View(new.flights10.20)
+```
+
+
 ## Separate date-time-hour
 
 ```{r separate date-time-hour}
-d <- as.POSIXct(new.flights202010$flights.positions.timestamp, format="%Y-%m-%d %H:%M:%S")
-new.flights202010$flights.positions.date_km <- format(d, format="%Y-%m-%d")
-new.flights202010$flights.positions.time_km <- format(d, format="%H:%M:%S")
-new.flights202010$flights.positions.hour_km <- format(d, format="%H")
+d <- as.POSIXct(new.flights10.20$flights.positions.PSTtimestamp, format="%Y-%m-%d %H:%M:%S")
+new.flights10.20$flights.positions.date_km <- format(d, format="%Y-%m-%d")
+new.flights10.20$flights.positions.time_km <- format(d, format="%H:%M:%S")
+new.flights10.20$flights.positions.hour_km <- format(d, format="%H")
+```
+
+
+```{r}
+#library(tidyverse)
+#lat_long <- df %>%
+ # mutate(loc = revgeocode(c(flights.positions.latitude, #flights.positions.longitude)))
 
 ```
+
+
+
+```{r reverse_geocode}
+
+#x <- revgeocode(flights.positions.latitude flights.positions.longitude)
+
+```
+
 
 ## Graph altitude over time & group by the call sign
 
 ```{r altitude over time}
-p <- ggplot(data=new.flights202010, aes(x=flights.positions.timestamp, y=flights.positions.altitude, color=flights.aircraftRegistration)) + geom_line() 
+p <- ggplot(data=new.flights10.20, aes(x=flights.positions.PSTtimestamp, y=flights.positions.altitude, color=flights.aircraftRegistration)) + geom_line() 
 ggplotly(p)
 ```
 
 
 ## Subset of aircrafts
 ```{r subset altitude over time}
-p <- ggplot(subset(new.flights202010, flights.aircraftRegistration %in% c("N108DJ", "N108PP", "N110LA")), aes(x=flights.positions.timestamp, y=flights.positions.altitude, color=flights.aircraftRegistration)) + geom_line() 
+p <- ggplot(subset(new.flights10.20, flights.aircraftRegistration %in% c("N108DJ", "N108PP", "N110LA")), aes(x=flights.positions.PSTtimestamp, y=flights.positions.altitude, color=flights.aircraftRegistration)) + geom_line() 
 ggplotly(p)
 
 ```
@@ -128,7 +154,7 @@ ggplotly(p)
 ```{r plot heli count}
 # how many times each unique aircraft was in the air during each hour
 
-myplot_df <- unique(new.flights202010[c("flights.aircraftRegistration", "flights.positions.hour_km")])
+myplot_df <- unique(new.flights10.20[c("flights.aircraftRegistration", "flights.positions.hour_km")])
 
 p <- ggplot(data=myplot_df, aes(x=flights.positions.hour_km, color=flights.aircraftRegistration)) + geom_bar() 
 
@@ -142,7 +168,7 @@ confirm timezone because it seems weird that very few aircrafts would ever be ou
 ## Plot aggregate times each helicopter flew during different hours of the day throughout the month of October, 2020
 
 ```{r plot heli time}
-p <- ggplot(data=new.flights202010, aes(x=flights.positions.hour_km, color=flights.aircraftRegistration)) + geom_bar() 
+p <- ggplot(data=new.flights10.20, aes(x=flights.positions.hour_km, color=flights.aircraftRegistration)) + geom_bar() 
 ggplotly(p)
 ```
 
@@ -156,10 +182,10 @@ only want one of several positions within that hour
 
 ## Average flight duration
 
-```{r avg duration}
+```{r avg flight duration}
 
-#calculated landing-calculated takeoff
+#avg (calculated landing-calculated takeoff)
 
-
+# interested in total flight hours (and then later, flight hours spent in x axis code)
 ```
 

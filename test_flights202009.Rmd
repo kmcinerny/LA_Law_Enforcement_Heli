@@ -1,0 +1,40 @@
+---
+title: "test_flights202009"
+author: '605194735'
+date: "2/9/2022"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages, include=FALSE}
+# loading packages I might need
+library(plyr)
+library(tidyverse)
+library(ggplot2)
+library(mosaic)
+library(car)
+library(gmodels)
+library(readxl)
+library(lubridate) #to separate date/time
+library(plotly) #interactive graphics
+```
+
+
+```{r data}
+flights202009 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/flights202009.csv")
+
+#View(flights202009)
+```
+
+```{r callsign}
+unique(flights202009$flights.callsign)
+```
+
+```{r talnumber}
+unique(flights202009$flights.aircraftRegistration)
+
+flights202009 %>% count(flights.aircraftRegistration)
+```
+
