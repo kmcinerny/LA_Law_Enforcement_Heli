@@ -16,3 +16,4 @@ flight_id_no <- paste0("2020-Sept-FlightNo-", flight_id_no)
 flights9.20_csv <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/flights9.20.csv")
 flights9.20_id <- flights9.20_csv %>%
   mutate(flight_id = flight_id_no)
+

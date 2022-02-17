@@ -39,10 +39,10 @@ def json_to_dataframe(data_in):
     return pandas.DataFrame(flatten_json(data_in))
 
 if __name__ == '__main__':
-    f = open('pretty-202003.json')
+    f = open('pretty-202002.json')
     json_data = json.load(f)
     df = json_to_dataframe(json_data)
-    df.to_csv("flights3.20.csv", sep=',', encoding='utf-8')
+    df.to_csv("flights2.20.csv", sep=',', encoding='utf-8')
 
     # change out input & export doc names based on dataset
     # run  python3 json-convert.py in terminal for conversion to csv
