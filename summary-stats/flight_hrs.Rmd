@@ -1,0 +1,81 @@
+---
+title: "Flight Hour Summary Stats"
+author: '605194735'
+date: "2/18/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r packages, include=FALSE}
+# loading packages I might need
+library(plyr)
+library(tidyverse)
+library(ggplot2)
+library(mosaic)
+library(car)
+library(gmodels)
+library(readxl)
+library(lubridate) #to separate date/time
+library(plotly) #interactive graphics
+library(ggmap)
+```
+
+```{r data}
+
+```
+
+```{r count positions over time}
+# count of positions at each hour by flight id
+p <- ggplot(data=flights11.19_hood, aes(x=hr_pos, color=flight_id)) + geom_bar()  
+ggplotly(p)
+
+# I want to count unique flights by hour, not all the positions within those flights
+
+# count of unique flights by hour
+#p <- ggplot(data=flights11.19_hood, aes(x=hr_pos, y=flight_id, color=flight_id)) + geom_bar()  
+#ggplotly(p)
+
+#q <- unique(flights11.19_hood[c("flight_id")])
+#r <- ggplot(data=myplot_df, aes(x="hr_pos", color="flight_id")) + geom_bar() 
+#ggplotly(r)
+
+```
+
+# Min, Med, Mean, Max Flight Hours
+```{r favstats}
+# convert from string to numeric
+flights11.19_hood$hr_pos_num <- as.numeric(flights11.19_hood$hr_pos)
+
+favstats(flights11.19_hood$hr_pos_num)
+
+```
+Why are there no NA values?
+
+```{r}
+# number of unique flights between 9 pm-3 am
+
+flights11.19_hood %>% filter(hr_pos_num==21) %>% count()
+# I want the count of flights not the count of positions
+
+```
+
+
+```{r}
+# convert string to time so that I can do landing-takeoff
+
+```
+
+
+```{r total flight hours}
+# summary of landing-takeoff for each unique flight
+
+```
+
+```{r avg duration}
+# avg of landing-takeoff across flights
+
+```
+
