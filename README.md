@@ -13,6 +13,7 @@ Los Angeles County supports the largest fleet of law enforcement helicopters in 
 | ----: | :---- |
 | [💻](# "Code") [📋](# "Organizer") [🤔](# "Ideas and Planning") | Kate McInerny |
 | [🔢](# "Content") [📋](# "Organizer") [🤔](# "Ideas and Planning") | Nick Shapiro |
+| [💻](# "Code") | Ethan Allavarpu |
 
 
 ## Advisory Committee
