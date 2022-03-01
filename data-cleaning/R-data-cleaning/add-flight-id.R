@@ -140,25 +140,25 @@ names(combined6.20_df) <- str_replace_all(names(combined6.20_df), # they automat
 
 ## May 2020
 
-flights5.20_json <- read_json("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/json/pretty-202005.json", simplifyVector = TRUE)
-flights5.20_df <- flights5.20_json$flights %>% as_tibble() # making a dataframe with just flights & nested positions
-pos5.20_df <- flights5.20_df$positions %>% bind_rows() # making a dataframe with just positions
+flight5.20_json <- read_json("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/json/pretty-202005.json", simplifyVector = TRUE)
+flight5.20_df <- flight5.20_json$flights %>% as_tibble() # making a dataframe with just flights & nested positions
+pos5.20_df <- flight5.20_df$positions %>% bind_rows() # making a dataframe with just positions
 
 # mapping id number to data based on number of positions per flight... 
 # this is where the errors start...
-num_pos <- map_int(flights5.20_df$positions, nrow) 
-flights5.20_id_no <- rep(seq_along(num_pos), num_pos)
-flights5.20_id_no <- paste0("2020-May-FlightNo-", flights5.20_id_no)
-unique_flights5.20_id <- unique(flights5.20_id_no)
+num_pos <- map_int(flight5.20_df$positions, nrow) 
+flight5.20_id_no <- rep(seq_along(num_pos), num_pos)
+flight5.20_id_no <- paste0("2020-May-FlightNo-", flight5.20_id_no)
+unique_flight5.20_id <- unique(flight5.20_id_no)
 
 # I need to understand what this is better... but I think it's selecting only positions
-flights5.20_df <- flights5.20_df %>%
+flight5.20_df <- flight5.20_df %>%
   select(-positions) %>%
-  mutate(flight_id = unique_flights5.20_id)
+  mutate(flight_id = unique_flight5.20_id)
 pos5.20_df <- pos5.20_df %>%
-  mutate(flight_id = flights5.20_id_no) 
+  mutate(flight_id = flight5.20_id_no) 
 
-combined5.20_df <- full_join(flights5.20_df, pos5.20_df, by = "flight_id") # this is the key to join datasets
+combined5.20_df <- full_join(flight5.20_df, pos5.20_df, by = "flight_id") # this is the key to join datasets
 names(combined5.20_df) <- str_replace_all(names(combined5.20_df), # they automatically assign x and y
                                           c("\\.x" = "_flight",
                                             "\\.y" = "_pos"))
