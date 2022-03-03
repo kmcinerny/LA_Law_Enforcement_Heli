@@ -4,20 +4,25 @@ library(tictoc)
 
 # Read in the position CSV file (from add-flight-id.R)
 
-## Oct 2020
-positions10.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/positions10.20.csv")
+
+## Oct 2019
+pos10.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19_df.csv")
+
 
 ## May 2020
-positions5.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/positions5.20.csv")
+pos5.20_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20_df.csv")
 
+
+## Oct 2020
+pos10.20_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos10.20_df.csv")
 
 
 findOutliers <- function(flight, df, ascent_rate = 1600) {
   # Only care about altitude and timestamp
   flight_alt <- df %>%
     filter(flight_id == flight) %>%
-    select(altitude, timestamp) %>%
-    mutate(timestamp = ymd_hms(timestamp) %>% with_tz()) # change to PST within flight (don't need if I already changed flight times)
+    select(altitude, timestamp) #%>%
+    #mutate(timestamp = ymd_hms(timestamp) %>% with_tz()) # change to PST within flight (don't need if I already changed flight times)
   valid <- 1
   outlier <- logical(nrow(flight_alt))
   if (length(outlier) > 1) {
@@ -59,27 +64,44 @@ findOutliers <- function(flight, df, ascent_rate = 1600) {
 
 # Apply findOutliers to all unique flight IDs
 
-## Oct 2020
+
+## Oct 2019
 tic()
-all_outliers <- map(unique(positions10.20$flight_id),
+all_outliers <- map(unique(pos10.19_df$flight_id),
                     findOutliers,
-                    df = positions10.20,
+                    df = pos10.19_df,
                     ascent_rate = 2000)
 toc()
 
-pos10.20_outliers <- positions10.20 %>% mutate(is_outlier = unlist(all_outliers))
+pos10.19_outliers <- pos10.19_df %>% mutate(is_outlier = unlist(all_outliers))
 
-write.csv(pos10.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos10.20_outliers.csv") 
+write.csv(pos10.19_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19_outliers.csv") 
+
+
 
 
 ## May 2020
 tic()
-all_outliers <- map(unique(positions5.20$flight_id),
+all_outliers <- map(unique(pos5.20_df$flight_id),
                     findOutliers,
-                    df = positions5.20,
+                    df = pos5.20_df,
                     ascent_rate = 2000)
 toc()
-pos5.20_outliers <- positions5.20 %>% mutate(is_outlier = unlist(all_outliers))
+pos5.20_outliers <- pos5.20_df %>% mutate(is_outlier = unlist(all_outliers))
 
 write.csv(pos5.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20_outliers.csv") 
+
+
+
+## Oct 2020
+tic()
+all_outliers <- map(unique(pos10.20_df$flight_id),
+                    findOutliers,
+                    df = pos10.20_df,
+                    ascent_rate = 2000)
+toc()
+
+pos10.20_outliers <- pos10.20_df %>% mutate(is_outlier = unlist(all_outliers))
+
+write.csv(pos10.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.20/pos10.20_outliers.csv") 
 
