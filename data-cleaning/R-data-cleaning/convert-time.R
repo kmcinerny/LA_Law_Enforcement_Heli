@@ -10,13 +10,39 @@ library(plotly) #interactive graphics
 library(ggmap)
 
 
+
+## Oct 2019
+
 # load data 
-positions5.20 <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/positions5.20.csv")
+#pos10.19_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/10.19/pos10.19_df.csv")
 
 # convert timestamp to PST
-positions5.20$PSTtimestamp <- with_tz(ymd_hms(positions5.20$timestamp))
+pos10.19_df$timestamp <- with_tz(ymd_hms(pos10.19_df$timestamp))
 
-write.csv(positions5.20, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/positions5.20.csv")
+write.csv(pos10.19_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19_df.csv")
+
+
+
+
+## May 2020
+
+# load data 
+#pos5.20_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/pos5.20_df.csv")
+
+# convert timestamp to PST
+pos5.20_df$timestamp <- with_tz(ymd_hms(pos5.20_df$timestamp))
+
+write.csv(pos5.20_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/pos5.20_df.csv")
+
+
+
+
+
+
+
+
+
+
 
 
 
