@@ -23,7 +23,7 @@ In the meantime, please see below for the order by which I processed the files:
     
     file name: same as #1
 
-### 3. Find outlier altitudes (& comment out mutate to PST line)
+### 3. Find outlier altitudes
     
     find-outlier-altitudes.R
     
