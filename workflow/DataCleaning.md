@@ -5,22 +5,31 @@ I could also use advice on whether to copy/paste the function several times with
 
 In the meantime, please see below for the order by which I processed the files:
 
-1. Write CSV with flight ID
-    info: This creates unique IDs for each flight based on its group of positions
-    file name: posM.YY_df.csv or posMM.YY_df.csv
-    example: pos5.20_df.csv or pos10.19_df.csv
+ 1. Write CSV with flight ID
+    ### info: 
+    This creates unique IDs for each flight based on its group of positions
+    ### file name: 
+    posM.YY_df.csv or posMM.YY_df.csv
+    ### example: 
+    pos5.20_df.csv or pos10.19_df.csv
 
 2. Select columns and mutate to PST
-    info: Original dataset in UTC, so this function converts it
-    file name: same as #1
+    ### info: 
+    Original dataset in UTC, so this function converts it
+    ### file name: 
+    same as #1
 
 3. Find outliers (& comment out mutate to PST line)
-    info: This creates a new variable that identifies whether a certain position is an outlier or not, based on the ascension/descension rate between it and the neighborhoring positions. Included a UTC-PST conversion, but because that would only exist within the function, we decided to create a separate, prior step for this time conversion.
-    file name example: pos5.20_outliers.csv
+    ## info: 
+    This creates a new variable that identifies whether a certain position is an outlier or not, based on the ascension/descension rate between it and the neighborhoring positions. Included a UTC-PST conversion, but because that would only exist within the function, we decided to create a separate, prior step for this time conversion.
+    ### file name example: 
+    pos5.20_outliers.csv
 
 4. Exclude outliers
-    info: This removes the outliers we identified in the prior file from the dataset.
+    ### info: 
+    This removes the outliers we identified in the prior file from the dataset.
 
 5. Spatial join
-    info: This is when we turn to QGIS to perform a spatial join between the position data and the LA County neighborhood file.
-    file name example: pos5.20_hood.csv
+    ### info: 
+    This is when we turn to QGIS to perform a spatial join between the position data and the LA County neighborhood file.
+    ### file name example: pos5.20_hood.csv
