@@ -4,7 +4,7 @@ library(lubridate)
 
 
 # Skip to line 18/19, replace hr in group_by(hr) with the name of hour column
-pos10.19_df <- pos10.19_df %>%
+pos10.19_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19_df.csv") %>%
   # Hour column has the format 00:00, 01:00, etc.s
   mutate(hr = paste(str_extract(timestamp,
                                 pattern = "(?<= )[[:digit:]]+"),
