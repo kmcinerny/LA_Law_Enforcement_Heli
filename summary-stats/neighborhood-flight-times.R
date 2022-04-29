@@ -9,6 +9,10 @@ library(dplyr)
 pos5.20grouphood <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
 
 
+# rename grouphoodname to neighborhood
+pos5.20grouphood <- rename(pos5.20grouphood, neighborhood=hoodgroupname)
+
+
 pos5.20grouphood <- pos5.20grouphood %>%
   # Fix the issue with naming--from Oct to May
   #mutate_at("flight_id",
@@ -43,7 +47,7 @@ pos5.20grouphoodtime <- pos5.20grouphood %>%
   # Summarise on a by flight, by neighborhood level
   #group_by(flight_id, neighborho) %>%
   # Summarize by neighborhood
-  group_by(hoodgroupname) %>%
+  group_by(neighborhood) %>%
   # Sum all times in the same neighborhood
   summarise(tot_time = sum(time_spent)) #%>%
   #arrange by same flight
@@ -54,7 +58,7 @@ pos5.20grouphoodtime
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
 top_n(pos5.20grouphoodtime, n=10, tot_time) %>%
-  filter(!is.na(hoodgroupname)) %>%
+  filter(!is.na(neighborhood)) %>%
   arrange(desc(tot_time))%>%
-  ggplot(., aes(x=hoodgroupname, y=tot_time))+
+  ggplot(., aes(x=neighborhood, y=tot_time))+
   geom_bar(stat='identity', fill='#ea4524') 
