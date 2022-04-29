@@ -9,6 +9,7 @@ set.seed(0)
 # Change this to read in the specific data file of interest
 monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
 
+
 # Inputs
 ## monthly_data (data.frame, tbl)
 ### A data frame of flight position data with information on heading, flight_id
@@ -173,9 +174,30 @@ orbit_results <- determine_orbit_positions(monthly_data, minute_range = 10, orbi
 write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-20min2turns.csv")
 
 
+
+
+# which neighborhoods have the most points where a flight is_orbiting?
+# need to count total is_orbiting points per neighborhood
+# but then also need to count # of unique flights that contain is_orbiting points in that neighborhood
+
+
+# need to permanently change grouphoodname to neighborhood
+
+
+neighborhood_niteorbits_may2020 <- orbit_results %>%
+  # Calculate neighborhood times within each flight_id
+  group_by(flight_id) %>%
+  group_by(hoodgroupname) %>%
+  # Sum all times in the same neighborhood
+  summarise(tot_orbit_pts = sum(is_orbiting)) %>%
+  #arrange by same flight
+  #arrange(flight_id, desc(tot_time))
+  arrange(desc(tot_orbit_pts))
+
+neighborhood_niteorbits_may2020
+
+
 # then isolate the points where is_orbiting=TRUE
-
-
 
 
 
