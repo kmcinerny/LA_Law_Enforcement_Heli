@@ -173,29 +173,6 @@ orbit_results <- determine_orbit_positions(monthly_data, minute_range = 10, orbi
 write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-20min2turns.csv")
 
 
-# need to get rid of this part cuz i understood the code wrong
-
-# filter flights where ever_orbiting=TRUE (i.e. they orbited at some point in the flight)
-orbits_only <- orbit_results %>%
-  filter(ever_orbiting==TRUE)
-# of those, count unique flight IDs
-orbit_uniqueflights <- unique(orbits_only$flight_id)
-length(orbit_uniqueflights)
-
-# there must be a smoother way to combine this code with the above, but idk how so
-# filter flights where ever_orbiting=FALSE 
-no_orbit <- orbit_results %>% 
-  filter(ever_orbiting==FALSE)
-# of those, count unique flight IDs
-no_orbit_flights <- unique(no_orbit$flight_id)
-length(no_orbit_flights)
-# question: why are there more flights that never orbit (124 compared to 111 that do) but way fewer observations in that data? Is it because these flights are significantly shorter?
-# look at total flight time for orbiting flights vs. non-orbiting
-
-# write csv that isolates only those flights that orbit
-write_csv(orbits_only, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-westside-niteorbits-only.csv")
-
-
 # then isolate the points where is_orbiting=TRUE
 
 
