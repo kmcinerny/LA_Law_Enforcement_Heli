@@ -62,4 +62,5 @@ top_n(pos5.20grouphoodtime, n=10, tot_time) %>%
   filter(!is.na(neighborhood)) %>%
   arrange(desc(tot_time))%>%
   ggplot(., aes(x=neighborhood, y=tot_time))+
-  geom_bar(stat='identity', fill='#ea4524') 
+  geom_bar(stat='identity', fill='#ea4524') +
+  labs(y="Time Spent (Hours)", x="Neighborhood")
