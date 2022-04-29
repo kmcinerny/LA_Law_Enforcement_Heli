@@ -2,6 +2,9 @@ rm(list = ls())
 library(lubridate)
 library(tidyverse)
 
+# changes : edit minute_range and orbit_threshold within orbit_results instead of function
+
+
 set.seed(0)
 # Change this to read in the specific data file of interest
 monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
@@ -14,7 +17,7 @@ monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/
 ### default: 15 minutes (total range of 30 minutes for +/- 15 minutes from timestamp)
 ## orbit_threshold (numeric, default = 720)
 ### The minimum rotation required (for a range of +/- minute_range) to classify a point as orbiting
-### deault: 720˚ (two full cycles)
+### default: 720˚ (two full cycles)
 
 # Output
 ##   data frame (data.frame, tbl)
@@ -26,12 +29,14 @@ monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/
 ####      is_orbiting (boolean/logical): Is the helicopter as orbiting or not at the given timestamp for the given flight?
 
 determine_orbit_positions <- function(monthly_data,
-                                      minute_range = 30,
+                                      minute_range = 15,
                                       orbit_threshold = 720) {
   # Calculate rotation statistics ----
   flight_bearing <- monthly_data %>%
     # Filter a subset for the function to run quicker.... right now I'm going limit neighborhood to Westside South Central
-    filter(hoodgroupname == "Westside South Central") %>%
+    # that doesn't work because flights don't just happen within one neighborhood
+    # is there a way to filter where it's any flight that ever flew in Westside South Central? Like limiting to those flights that contain points in Westside?
+    #filter(hoodgroupname == "Westside South Central") %>%
     # isolate hour of day for flight in order to filter
     mutate(hr = paste(str_extract(timestamp,
                                   pattern = "(?<= )[[:digit:]]+"),
@@ -164,8 +169,11 @@ determine_orbit_positions <- function(monthly_data,
           min_rot = orbit_threshold)
 }
 
-orbit_results <- determine_orbit_positions(monthly_data)
-write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-westside-niteorbits.csv")
+orbit_results <- determine_orbit_positions(monthly_data, minute_range = 10, orbit_threshold = 720)
+write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-20min2turns.csv")
+
+
+# need to get rid of this part cuz i understood the code wrong
 
 # filter flights where ever_orbiting=TRUE (i.e. they orbited at some point in the flight)
 orbits_only <- orbit_results %>%
