@@ -43,15 +43,16 @@ pos5.20grouphoodtime <- pos5.20grouphood %>%
          # Midway point between current and next times
          half_to = (seconds_in + next_second) / 2,
          # Time at a given location calculated by time as nearest time stamp
-         time_spent = half_to - half_from) %>%
+         time_spent = (half_to - half_from)/3600) %>%
   # Summarise on a by flight, by neighborhood level
   #group_by(flight_id, neighborho) %>%
   # Summarize by neighborhood
   group_by(neighborhood) %>%
   # Sum all times in the same neighborhood
-  summarise(tot_time = sum(time_spent)) #%>%
+  summarise(tot_time = sum(time_spent)) %>%
   #arrange by same flight
   #arrange(flight_id, desc(tot_time))
+  arrange(desc(tot_time))
 
 
 pos5.20grouphoodtime
