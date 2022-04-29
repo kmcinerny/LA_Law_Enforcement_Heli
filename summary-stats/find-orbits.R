@@ -190,12 +190,21 @@ neighborhood_niteorbits_may2020 <- orbit_results %>%
   group_by(hoodgroupname) %>%
   # Sum all times in the same neighborhood
   summarise(tot_orbit_pts = sum(is_orbiting)) %>%
-  #arrange by same flight
-  #arrange(flight_id, desc(tot_time))
+  # arrange by descending # of orbit points
   arrange(desc(tot_orbit_pts))
 
 neighborhood_niteorbits_may2020
 
+
+#graph top 10 neighborhoods with the highest time counts (in seconds)
+top_n(neighborhood_niteorbits_may2020, n=10, tot_orbit_pts) %>%
+  filter(!is.na(hoodgroupname)) %>%
+  arrange(desc(tot_orbit_pts))%>%
+  ggplot(., aes(x=hoodgroupname, y=tot_orbit_pts))+
+  geom_bar(stat='identity', fill='#ea4524') +
+  labs(y="Total Orbit Points", x="Neighborhood")
+
+# this could be cool to do in a bubble or tree chart instead because it's about relative size
 
 # then isolate the points where is_orbiting=TRUE
 
