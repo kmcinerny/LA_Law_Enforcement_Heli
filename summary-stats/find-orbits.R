@@ -39,12 +39,12 @@ determine_orbit_positions <- function(monthly_data,
     # is there a way to filter where it's any flight that ever flew in Westside South Central? Like limiting to those flights that contain points in Westside?
     #filter(hoodgroupname == "Westside South Central") %>%
     # isolate hour of day for flight in order to filter
-    mutate(hr = paste(str_extract(timestamp,
-                                  pattern = "(?<= )[[:digit:]]+"),
-                      "00",
-                      sep = ":")) %>%
+    #mutate(hr = paste(str_extract(timestamp,
+                                  #pattern = "(?<= )[[:digit:]]+"),
+                      #"00",
+                      #sep = ":")) %>%
     # filter flights to certain times (9 pm- 7 am)
-    filter(hr %in% c("21:00","22:00","23:00","00:00","01:00","02:00", "03:00","04:00","05:00","06:00","07:00")) %>%
+    #filter(hr %in% c("21:00","22:00","23:00","00:00","01:00","02:00", "03:00","04:00","05:00","06:00","07:00")) %>%
     # Only consider when in the air, heading data present
     filter(altitude > 0, !is.na(heading)) %>%
     # Mutate on a group-by-group basis
@@ -170,7 +170,7 @@ determine_orbit_positions <- function(monthly_data,
           min_rot = orbit_threshold)
 }
 
-orbit_results <- determine_orbit_positions(monthly_data, minute_range = 10, orbit_threshold = 720)
+orbit_results <- determine_orbit_positions(monthly_data, minute_range = 30, orbit_threshold = 1440)
 write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-20min2turns.csv")
 
 
@@ -195,6 +195,11 @@ neighborhood_niteorbits_may2020 <- orbit_results %>%
 
 neighborhood_niteorbits_may2020
 
+orbit_results %>%
+  filter(is_orbiting) %>%
+  group_by(hoodgroupname) %>%
+  summarise(n_flights_in_grp = n_distinct(flight_id))
+
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
 top_n(neighborhood_niteorbits_may2020, n=10, tot_orbit_pts) %>%
@@ -203,8 +208,11 @@ top_n(neighborhood_niteorbits_may2020, n=10, tot_orbit_pts) %>%
   ggplot(., aes(x=hoodgroupname, y=tot_orbit_pts))+
   geom_bar(stat='identity', fill='#ea4524') +
   labs(y="Total Orbit Points", x="Neighborhood")
-
 # this could be cool to do in a bubble or tree chart instead because it's about relative size
+
+
+# CLAC DURATION OF ORBITS
+
 
 # then isolate the points where is_orbiting=TRUE
 
