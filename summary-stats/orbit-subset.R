@@ -4,7 +4,7 @@ library(tidyverse)
 
 set.seed(0)
 # Change this to read in the specific data file of interest
-monthly_data <- read_csv("data/raw/pos5.20grouphood.csv")
+monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
 
 flights_of_interest <- monthly_data %>%
   # Find the hour of the timestamp

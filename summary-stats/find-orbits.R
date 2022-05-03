@@ -9,6 +9,20 @@ set.seed(0)
 # Change this to read in the specific data file of interest
 monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
 
+# take subset of flights for filter
+flights_of_interest <- monthly_data %>%
+  # Find the hour of the timestamp
+  mutate(hr = timestamp %>%
+           str_extract(pattern = '(?<= )[[:digit:]]+') %>%
+           as.numeric()) %>%
+  # Subset to between 9:00 PM and 7:00 AM, only for flights that enter Westside South Central
+  filter(hr >= 21 | hr <= 7 #,
+         #hoodgroupname == 'Westside South Central') 
+         )%>%
+  # Extract the flight_ids for all flights that meet these criteria at least once
+  pull(flight_id) %>%
+  # Find the unique set of flight_ids
+  unique()
 
 # Inputs
 ## monthly_data (data.frame, tbl)
@@ -34,16 +48,8 @@ determine_orbit_positions <- function(monthly_data,
                                       orbit_threshold = 720) {
   # Calculate rotation statistics ----
   flight_bearing <- monthly_data %>%
-    # Filter a subset for the function to run quicker.... right now I'm going limit neighborhood to Westside South Central
-    # that doesn't work because flights don't just happen within one neighborhood
-    # is there a way to filter where it's any flight that ever flew in Westside South Central? Like limiting to those flights that contain points in Westside?
-    #filter(hoodgroupname == "Westside South Central") %>%
-    # isolate hour of day for flight in order to filter
-    #mutate(hr = paste(str_extract(timestamp,
-                                  #pattern = "(?<= )[[:digit:]]+"),
-                      #"00",
-                      #sep = ":")) %>%
-    # filter flights to certain times (9 pm- 7 am)
+    # filter to subset that I defined above in flights_of_interest 
+    filter(flight_id %in% flights_of_interest) %>%
     #filter(hr %in% c("21:00","22:00","23:00","00:00","01:00","02:00", "03:00","04:00","05:00","06:00","07:00")) %>%
     # Only consider when in the air, heading data present
     filter(altitude > 0, !is.na(heading)) %>%
@@ -170,8 +176,8 @@ determine_orbit_positions <- function(monthly_data,
           min_rot = orbit_threshold)
 }
 
-orbit_results <- determine_orbit_positions(monthly_data, minute_range = 30, orbit_threshold = 1440)
-write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-20min2turns.csv")
+orbit_results <- determine_orbit_positions(monthly_data, minute_range = 5, orbit_threshold = 720)
+write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-10min2turns.csv")
 
 
 
@@ -199,7 +205,7 @@ orbit_results %>%
   filter(is_orbiting) %>%
   group_by(hoodgroupname) %>%
   summarise(n_flights_in_grp = n_distinct(flight_id))
-
+# 235 of the flights in May between 9 pm-7 am flew over Westside South Central    
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
 top_n(neighborhood_niteorbits_may2020, n=10, tot_orbit_pts) %>%
@@ -211,7 +217,7 @@ top_n(neighborhood_niteorbits_may2020, n=10, tot_orbit_pts) %>%
 # this could be cool to do in a bubble or tree chart instead because it's about relative size
 
 
-# CLAC DURATION OF ORBITS
+# CALC DURATION OF ORBITS
 
 
 # then isolate the points where is_orbiting=TRUE
