@@ -79,14 +79,14 @@ pos5.20_outliers <- pos5.20_df %>% mutate(is_outlier = unlist(all_outliers))
 # write.csv(pos5.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20_outliers.csv") 
 
 
-# exclude outlier altitudes
+# find how many are outliers
 mean(pos5.20_outliers$is_outlier=="TRUE")
 
 # [1] 0.008151447 -> .8% are outliers
 
+# exclude outlier altitudes
 pos5.20 <- pos5.20_outliers %>% filter(!is_outlier=="TRUE")
 write.csv(pos5.20, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20.csv")
-
 
 
 
