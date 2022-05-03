@@ -177,7 +177,7 @@ determine_orbit_positions <- function(monthly_data,
 }
 
 orbit_results <- determine_orbit_positions(monthly_data, minute_range = 5, orbit_threshold = 720)
-write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-10min2turns.csv")
+write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-10min2turns-new.csv")
 
 
 
@@ -204,7 +204,8 @@ neighborhood_niteorbits_may2020
 orbit_results %>%
   filter(is_orbiting) %>%
   group_by(hoodgroupname) %>%
-  summarise(n_flights_in_grp = n_distinct(flight_id))
+  summarise(n_flights_in_grp = n_distinct(flight_id)) %>%
+  arrange(desc(n_flights_in_grp))
 # 235 of the flights in May between 9 pm-7 am flew over Westside South Central    
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
