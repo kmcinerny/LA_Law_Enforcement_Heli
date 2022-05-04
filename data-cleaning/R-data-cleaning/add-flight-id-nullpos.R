@@ -4,10 +4,28 @@ library(jsonlite)
 
 # Read in the JSON file
 flight5.20_json <- read_json("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/json/pretty-202005.json", simplifyVector = TRUE)
+
 # Extract the flight data frame (one observation per flight)
 flight5.20_df <- flight5.20_json$flights %>% as_tibble() # making a data frame with just flights & nested positions
+
+# list tail numbers alphabetically
+q <- unique(flight5.20_df$aircraftRegistration)
+sort(q)
+
+# filter to law enforcement
+
+flight5.20_df <- flight5.20_df %>% 
+  filter(aircraftRegistration %in% c("N108DJ", "N108PP","N130SK","N171WC","N213PF", "N221LA", "N223LA", 
+                                    "N224KB", "N225LA", "N228LA","N228LA", "N229LA","N239PS","N267LA",
+                                    "N29LB", "N3202Q","N472LA", "N501RM", "N520PD", "N521PD", "N661PD",
+                                    "N662PD", "N664PD", "N665PD", "N668PD", "N80NT", "N8NF", "N913WB",
+                                    "N930DK", "N950SG", "N951LA", "N951LB", "N952JH", "N953LA", "N954LA",
+                                    "N955LA", "N956LA", "N957LA", "N958LA", "N959LA", "N960LA", "N961LA",
+                                    "N961SD", "N962LA", "N963SD", "N966SD"))
+
 # Extract the position information (one observation/row per position)
 pos5.20_df <- flight5.20_df$positions %>% bind_rows() # making a data frame with just positions
+
 
 # Find the number of rows (positions) in each flight
 num_pos5.20 <- map(flight5.20_df$positions, nrow) 
@@ -32,6 +50,8 @@ combined5.20_df <- full_join(flight5.20_df, pos5.20_df, by = "flight_id")
 names(combined5.20_df) <- str_replace_all(names(combined5.20_df),
                                            c("\\.x" = "_flight",
                                              "\\.y" = "_pos"))
+
+
 
 write.csv(pos5.20_df, file = "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/pos5.20_df.csv")
 
