@@ -46,10 +46,17 @@ flight5.20_df <- flight5.20_df %>%
 pos5.20_df <- pos5.20_df %>%
   mutate(flight_id = flight5.20_id_no)
 
-combined5.20_df <- full_join(flight5.20_df, pos5.20_df, by = "flight_id")
-names(combined5.20_df) <- str_replace_all(names(combined5.20_df),
-                                           c("\\.x" = "_flight",
-                                             "\\.y" = "_pos"))
+# create new df of flights with ID and tail #
+flight5.20_num <- flight5.20_df %>%
+  select(flight_id, aircraftRegistration)
+
+# join tail number to position data with key column flight ID
+pos5.20_df <- full_join(flight5.20_num, pos5.20_df, by = "flight_id")
+
+#combined5.20_df <- full_join(flight5.20_df, pos5.20_df, by = "flight_id")
+#names(combined5.20_df) <- str_replace_all(names(combined5.20_df),
+#                                           c("\\.x" = "_flight",
+#                                             "\\.y" = "_pos"))
 
 
 
