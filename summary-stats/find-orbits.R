@@ -1,3 +1,5 @@
+# this code attempts to translate John Wiseman's code used for Circular Advisory bots into R. For his original code see https://gitlab.com/jjwiseman/advisory-circular-rs/-/blob/master/src/aircraft.rs#L229
+
 rm(list = ls())
 library(lubridate)
 library(tidyverse)
