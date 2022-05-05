@@ -82,11 +82,17 @@ pos5.20_outliers <- pos5.20_df %>% mutate(is_outlier = unlist(all_outliers))
 # find how many are outliers
 mean(pos5.20_outliers$is_outlier=="TRUE")
 
-# [1] 0.008151447 -> .8% are outliers
+# [1] 0.007466235 -> .7% are outliers
 
 # exclude outlier altitudes
 pos5.20 <- pos5.20_outliers %>% filter(!is_outlier=="TRUE")
-write.csv(pos5.20, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20.csv")
+write.csv(pos5.20, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20_df.csv")
 
+# see how many points are missing lat/lon and thus won't map
+sum(is.na(pos5.20$latitude))
+sum(is.na(pos5.20$longitude))
+# NA- 432616 both lat/lon
+# 1,160,667 - 432616 = 728,051 mappable
 
-
+# drop na lat/lon values
+pos5.20 <- pos5.20 %>% drop_na(latitude)
