@@ -1,3 +1,5 @@
+# this code attempts to translate John Wiseman's code used for Circular Advisory bots into R. For his original code see https://gitlab.com/jjwiseman/advisory-circular-rs/-/blob/master/src/aircraft.rs#L229
+
 rm(list = ls())
 library(lubridate)
 library(tidyverse)
@@ -7,7 +9,11 @@ library(tidyverse)
 
 set.seed(0)
 # Change this to read in the specific data file of interest
-monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
+monthly_data <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20.csv")
+
+monthly_data <- rename(monthly_data, neighborhood= neighborhoodname)
+
+write_csv(monthly_data, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20.csv")
 
 # take subset of flights for filter
 flights_of_interest <- monthly_data %>%
@@ -17,7 +23,7 @@ flights_of_interest <- monthly_data %>%
            as.numeric()) %>%
   # Subset to between 9:00 PM and 7:00 AM, only for flights that enter Westside South Central
   filter(hr >= 21 | hr <= 7 #,
-         #hoodgroupname == 'Westside South Central') 
+         #neighborhood == 'Westside South Central') 
          )%>%
   # Extract the flight_ids for all flights that meet these criteria at least once
   pull(flight_id) %>%
@@ -177,7 +183,7 @@ determine_orbit_positions <- function(monthly_data,
 }
 
 orbit_results <- determine_orbit_positions(monthly_data, minute_range = 5, orbit_threshold = 720)
-write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-10min2turns-new.csv")
+write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-10min2turns.csv")
 
 
 
@@ -193,7 +199,7 @@ write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5
 neighborhood_niteorbits_may2020 <- orbit_results %>%
   # Calculate neighborhood times within each flight_id
   group_by(flight_id) %>%
-  group_by(hoodgroupname) %>%
+  group_by(neighborhood) %>%
   # Sum all times in the same neighborhood
   summarise(tot_orbit_pts = sum(is_orbiting)) %>%
   # arrange by descending # of orbit points
@@ -203,16 +209,16 @@ neighborhood_niteorbits_may2020
 
 orbit_results %>%
   filter(is_orbiting) %>%
-  group_by(hoodgroupname) %>%
+  group_by(neighborhood) %>%
   summarise(n_flights_in_grp = n_distinct(flight_id)) %>%
   arrange(desc(n_flights_in_grp))
 # 235 of the flights in May between 9 pm-7 am flew over Westside South Central    
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
 top_n(neighborhood_niteorbits_may2020, n=10, tot_orbit_pts) %>%
-  filter(!is.na(hoodgroupname)) %>%
+  filter(!is.na(neighborhood)) %>%
   arrange(desc(tot_orbit_pts))%>%
-  ggplot(., aes(x=hoodgroupname, y=tot_orbit_pts))+
+  ggplot(., aes(x=neighborhood, y=tot_orbit_pts))+
   geom_bar(stat='identity', fill='#ea4524') +
   labs(y="Total Orbit Points", x="Neighborhood")
 # this could be cool to do in a bubble or tree chart instead because it's about relative size
