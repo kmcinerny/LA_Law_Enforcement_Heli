@@ -6,14 +6,9 @@ library(dplyr)
 ## May 2020
 
 # Read in the data file
-pos5.20grouphood <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20grouphood.csv")
+pos5.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20.csv")
 
-
-# rename grouphoodname to neighborhood
-pos5.20grouphood <- rename(pos5.20grouphood, neighborhood=hoodgroupname)
-
-
-pos5.20grouphood <- pos5.20grouphood %>%
+pos5.20 <- pos5.20 %>%
   # Fix the issue with naming--from Oct to May
   #mutate_at("flight_id",
   #str_replace,
@@ -23,7 +18,7 @@ pos5.20grouphood <- pos5.20grouphood %>%
   ## Time stamp arranged within each flight_id
   arrange(flight_id, timestamp)
 
-pos5.20grouphoodtime <- pos5.20grouphood %>%
+pos5.20time <- pos5.20 %>%
   # Calculate neighborhood times within each flight_id
   group_by(flight_id) %>%
   # Find total time in seconds relative to first time in that flight
@@ -55,10 +50,22 @@ pos5.20grouphoodtime <- pos5.20grouphood %>%
   arrange(desc(tot_time))
 
 
-pos5.20grouphoodtime
+pos5.20time
+
+# read in neighborhood sq mi
+neighborhood_sqmi <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/Mapping/Boundaries/neighborhood_sqmi.csv")
+
+# join sq mi to flight time
+pos5.20time <- left_join(pos5.20time, neighborhood_sqmi, by = "neighborhood")
+
+
+# create new variable to divide flight times by sq mi
+pos5.20time$time_area <- pos5.20time$tot_time/ pos5.20time$sqmi
+write.csv(pos5.20time, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/hoodtime5.20.csv")
+
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
-top_n(pos5.20grouphoodtime, n=10, tot_time) %>%
+top_n(pos5.20time, n=10, tot_time) %>%
   filter(!is.na(neighborhood)) %>%
   arrange(desc(tot_time))%>%
   ggplot(., aes(x=neighborhood, y=tot_time))+
