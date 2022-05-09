@@ -2,19 +2,8 @@ library(tidyverse)
 library(lubridate)
 library(tictoc)
 
-# Read in the position CSV file (from add-flight-id.R)
-
-
-## Oct 2019
-pos10.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19_df.csv")
-
-
-## May 2020
-pos5.20_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20_df.csv")
-
-
-## Oct 2020
-pos10.20_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos10.20_df.csv")
+# Read in the position CSV file 
+pos11.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/11.19/pos11.19_df.csv")
 
 
 findOutliers <- function(flight, df, ascent_rate = 1600) {
@@ -63,36 +52,29 @@ findOutliers <- function(flight, df, ascent_rate = 1600) {
 }
 
 # Apply findOutliers to all unique flight IDs
-
-
-
-
-## May 2020
 tic()
-all_outliers <- map(unique(pos5.20_df$flight_id),
+all_outliers <- map(unique(pos11.19_df$flight_id),
                     findOutliers,
-                    df = pos5.20_df,
-                    ascent_rate = 2000)
+                    df = pos11.19_df,
+                    ascent_rate = 2500)
 toc()
-pos5.20_outliers <- pos5.20_df %>% mutate(is_outlier = unlist(all_outliers))
+pos11.19_outliers <- pos11.19_df %>% mutate(is_outlier = unlist(all_outliers))
 
-# write.csv(pos5.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos5.20_outliers.csv") 
+# write.csv(pos11.19_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos11.19_outliers.csv") 
 
 
 # find how many are outliers
-mean(pos5.20_outliers$is_outlier=="TRUE")
+mean(pos11.19_outliers$is_outlier=="TRUE")
 
-# [1] 0.007466235 -> .7% are outliers
 
 # exclude outlier altitudes
-pos5.20 <- pos5.20_outliers %>% filter(!is_outlier=="TRUE")
-write.csv(pos5.20, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20_df.csv")
+pos11.19 <- pos11.19_outliers %>% filter(!is_outlier=="TRUE")
 
 # see how many points are missing lat/lon and thus won't map
-sum(is.na(pos5.20$latitude))
-sum(is.na(pos5.20$longitude))
-# NA- 432616 both lat/lon
-# 1,160,667 - 432616 = 728,051 mappable
+sum(is.na(pos11.19$latitude))
+sum(is.na(pos11.19$longitude))
 
 # drop na lat/lon values
-pos5.20 <- pos5.20 %>% drop_na(latitude)
+pos11.19 <- pos11.19 %>% drop_na(latitude)
+
+write.csv(pos11.19, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/11.19/pos11.19.csv")
