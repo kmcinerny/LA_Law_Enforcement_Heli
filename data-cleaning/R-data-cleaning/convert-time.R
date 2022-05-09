@@ -1,13 +1,6 @@
-library(plyr)
-library(tidyverse)
-library(ggplot2)
-library(mosaic)
-library(car)
-library(gmodels)
-library(readxl)
+
 library(lubridate) #to separate date/time
-library(plotly) #interactive graphics
-library(ggmap)
+
 
 
 ## May 2020
@@ -18,7 +11,7 @@ library(ggmap)
 # convert timestamp to PST
 pos5.20_df$timestamp <- with_tz(ymd_hms(pos5.20_df$timestamp))
 
-write.csv(pos5.20_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/pos5.20_df.csv")
+write.csv(pos5.20_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv//5.20/pos5.20_df.csv")
 
 
 
