@@ -10,7 +10,7 @@ library(plotly) #interactive graphics
 library(ggmap)
 
 # Altitude over time
-r <- ggplot(data=pos5.20_outliers, aes(x=timestamp, y=altitude, color=flight_id)) + geom_line() 
+r <- ggplot(data=pos3.20, aes(x=timestamp, y=altitude, color=flight_id)) + geom_line() 
 ggplotly(r)
 
 
