@@ -6,12 +6,12 @@ library(lubridate) #to separate date/time
 ## May 2020
 
 # load data 
-#pos5.20_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/pos5.20_df.csv")
+pos5.20_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20_df.csv")
 
 # convert timestamp to PST
 pos5.20_df$timestamp <- with_tz(ymd_hms(pos5.20_df$timestamp))
 
-write.csv(pos5.20_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv//5.20/pos5.20_df.csv")
+write.csv(pos5.20_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/5.20/pos5.20_df.csv")
 
 
 
