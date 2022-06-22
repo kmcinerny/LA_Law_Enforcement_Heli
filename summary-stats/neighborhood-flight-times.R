@@ -1,24 +1,37 @@
+rm(list = ls())
 library(tidyverse)
 library(dplyr)
 
 # changes made on this doc: deleted repeat code/ changed variable name to "neighborhood" / turned seconds into hours for time spent per neighborhood
 
-## May 2020
-
 # Read in the data file
-pos5.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20.csv")
+pos2.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/pos2.20.csv")
 
-pos5.20 <- pos5.20 %>%
+
+
+# renaming neighborhood column
+pos2.20 <- rename(pos2.20, neighborhood=neighborhoodname)
+
+pos2.20 <- pos2.20 %>%
   # Fix the issue with naming--from Oct to May
   #mutate_at("flight_id",
   #str_replace,
-  #pattern = "Oct",
-  #replacement = "May") %>%
+  #pattern = "Jul",
+  #replacement = "Jun") %>%
   # Arrange the rows first by flight_id, then by time stamp (earliest to latest)
   ## Time stamp arranged within each flight_id
   arrange(flight_id, timestamp)
 
-pos5.20time <- pos5.20 %>%
+pos10.19 <- pos10.19 %>% arrange(flight_id, timestamp)
+
+pos10.20 <- pos10.20 %>% arrange(flight_id, timestamp)
+
+#pos2.20 %>% count(neighborhood, sort=TRUE)
+
+
+
+get_neighborhood_fly_time <- function(month_df){
+  neighborhood_fly_time <- month_df %>%
   # Calculate neighborhood times within each flight_id
   group_by(flight_id) %>%
   # Find total time in seconds relative to first time in that flight
@@ -47,25 +60,37 @@ pos5.20time <- pos5.20 %>%
   summarise(tot_time = sum(time_spent)) %>%
   #arrange by same flight
   #arrange(flight_id, desc(tot_time))
-  arrange(desc(tot_time))
+  arrange(desc(tot_time)) %>%
+  mutate(month = month_df %>%
+            slice(1) %>%
+            pull(flight_id) %>%
+            str_extract('\\d{4}-[A-Za-z]+(?=-)'))
+}
 
+  
 
-pos5.20time
+# Create a list with each element being a month's flight data frame
+month_data_list <- list(pos2.20)
+
+# Apply the tail time function for each month's dataframe
+all_months_hoodfly <- map_dfr(month_data_list, get_neighborhood_fly_time)
+
 
 # read in neighborhood sq mi
-neighborhood_sqmi <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/Mapping/Boundaries/neighborhood_sqmi.csv")
+neighborhood_sqmi <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/neighborhood_sqmi.csv")
 
 # join sq mi to flight time
-pos5.20time <- left_join(pos5.20time, neighborhood_sqmi, by = "neighborhood")
+all_months_hoodfly <- left_join(all_months_hoodfly, neighborhood_sqmi, by = "neighborhood")
 
 
 # create new variable to divide flight times by sq mi
-pos5.20time$time_area <- pos5.20time$tot_time/ pos5.20time$sqmi
-write.csv(pos5.20time, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/hoodtime5.20.csv")
+all_months_hoodfly$time_area <- all_months_hoodfly$tot_time/ all_months_hoodfly$sqmi
+
+write.csv(all_months_hoodfly, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/hoodflytime2.20.csv")
 
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
-top_n(pos5.20time, n=10, tot_time) %>%
+top_n(neighborhood_fly_time, n=10, tot_time) %>%
   filter(!is.na(neighborhood)) %>%
   arrange(desc(tot_time))%>%
   ggplot(., aes(x=neighborhood, y=tot_time))+
