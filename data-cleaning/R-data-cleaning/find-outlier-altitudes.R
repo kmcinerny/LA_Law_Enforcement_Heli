@@ -1,9 +1,10 @@
+
 library(tidyverse)
 library(lubridate)
 library(tictoc)
 
 # Read in the position CSV file 
-pos11.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/11.19/pos11.19_df.csv")
+pos2.20_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/pos2.20_df.csv")
 
 
 findOutliers <- function(flight, df, ascent_rate = 1600) {
@@ -53,28 +54,22 @@ findOutliers <- function(flight, df, ascent_rate = 1600) {
 
 # Apply findOutliers to all unique flight IDs
 tic()
-all_outliers <- map(unique(pos11.19_df$flight_id),
+all_outliers <- map(unique(pos2.20_df$flight_id),
                     findOutliers,
-                    df = pos11.19_df,
+                    df = pos2.20_df,
                     ascent_rate = 2500)
 toc()
-pos11.19_outliers <- pos11.19_df %>% mutate(is_outlier = unlist(all_outliers))
+pos2.20_outliers <- pos2.20_df %>% mutate(is_outlier = unlist(all_outliers))
 
-# write.csv(pos11.19_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos11.19_outliers.csv") 
+write.csv(pos2.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos2.20_outliers.csv") 
 
 
 # find how many are outliers
-mean(pos11.19_outliers$is_outlier=="TRUE")
+mean(pos2.20_outliers$is_outlier=="TRUE")
 
 
 # exclude outlier altitudes
-pos11.19 <- pos11.19_outliers %>% filter(!is_outlier=="TRUE")
+pos2.20 <- pos2.20_outliers %>% filter(!is_outlier=="TRUE")
 
-# see how many points are missing lat/lon and thus won't map
-sum(is.na(pos11.19$latitude))
-sum(is.na(pos11.19$longitude))
 
-# drop na lat/lon values
-pos11.19 <- pos11.19 %>% drop_na(latitude)
-
-write.csv(pos11.19, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/11.19/pos11.19.csv")
+write.csv(pos2.20, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/pos2.20_df.csv")
