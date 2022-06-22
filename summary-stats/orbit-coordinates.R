@@ -57,6 +57,9 @@ law_of_cosines <- function(prev_lat, prev_lon, lat, lon, next_lat, next_lon) {
   acos( (c^2 - a^2 - b^2) / (2*a*b)  )
 }
 
+bearing_helper <- function(longitude, latitude, next_lon, next_lat) {  
+  apply(cbind(longitude, latitude, next_lon, next_lat), 1, function(r) bearing(r[1:2], r[3:4]))
+}
 
 determine_orbit_positions <- function(monthly_data,
                                       minute_range = 15,
@@ -72,13 +75,13 @@ determine_orbit_positions <- function(monthly_data,
     arrange(timestamp) %>%
     # is this where I would want to replace the code with something based on lat/lon?
     mutate(next_lat = lead(latitude), next_lon = lead(longitude), 
-           bearing_geosphere = bearing(c(longitude, latitude), c(next_lon, next_lat))) %>%  
+           bearing_geosphere = bearing_helper(longitude, latitude, next_lon, next_lat)) %>%  
     mutate(prev_lat = lag(latitude), prev_lon = lag(longitude),
            turn_angle= law_of_cosines(prev_lat, prev_lon, latitude, longitude, next_lat, next_lon)) %>%  
     
     mutate(next_heading = lead(heading),
            next_bearing_geosphere = lead(bearing_geosphere),
-           heading = bearing, next_heading = next_bearing_geosphere,
+           heading = bearing_geosphere, next_heading = next_bearing_geosphere,
            direction = case_when(
              # If less than 180 degree change, assume correct
              abs(next_heading - heading) < 180 ~ next_heading - heading,
@@ -198,8 +201,8 @@ determine_orbit_positions <- function(monthly_data,
           min_rot = orbit_threshold)
 }
 
-orbit_results <- determine_orbit_positions(monthly_data, minute_range = 15, orbit_threshold = 720)
-write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-10min2turns.csv")
+orbit_results <- determine_orbit_positions(monthly_data, minute_range = 5, orbit_threshold = 720)
+write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-30min2turns.csv")
 
 
 
