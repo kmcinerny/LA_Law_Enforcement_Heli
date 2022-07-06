@@ -5,14 +5,14 @@ library(dplyr)
 # changes made on this doc: deleted repeat code/ changed variable name to "neighborhood" / turned seconds into hours for time spent per neighborhood
 
 # Read in the data file
-pos2.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/pos2.20.csv")
+pos5.20 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20.csv")
 
 
 
 # renaming neighborhood column
-pos2.20 <- rename(pos2.20, neighborhood=neighborhoodname)
+pos5.20 <- rename(pos5.20, neighborhood=neighborhoodname)
 
-pos2.20 <- pos2.20 %>%
+pos5.20 <- pos5.20 %>%
   # Fix the issue with naming--from Oct to May
   #mutate_at("flight_id",
   #str_replace,
@@ -26,7 +26,7 @@ pos10.19 <- pos10.19 %>% arrange(flight_id, timestamp)
 
 pos10.20 <- pos10.20 %>% arrange(flight_id, timestamp)
 
-#pos2.20 %>% count(neighborhood, sort=TRUE)
+#pos5.20 %>% count(neighborhood, sort=TRUE)
 
 
 
@@ -70,7 +70,7 @@ get_neighborhood_fly_time <- function(month_df){
   
 
 # Create a list with each element being a month's flight data frame
-month_data_list <- list(pos2.20)
+month_data_list <- list(pos5.20)
 
 # Apply the tail time function for each month's dataframe
 all_months_hoodfly <- map_dfr(month_data_list, get_neighborhood_fly_time)
@@ -86,13 +86,15 @@ all_months_hoodfly <- left_join(all_months_hoodfly, neighborhood_sqmi, by = "nei
 # create new variable to divide flight times by sq mi
 all_months_hoodfly$time_area <- all_months_hoodfly$tot_time/ all_months_hoodfly$sqmi
 
-write.csv(all_months_hoodfly, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/hoodflytime2.20.csv")
+write.csv(all_months_hoodfly, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/hoodtime5.20.csv")
+
 
 
 #graph top 10 neighborhoods with the highest time counts (in seconds)
-top_n(neighborhood_fly_time, n=10, tot_time) %>%
+top_n(hoodtime, n=10, tot_time) %>%
   filter(!is.na(neighborhood)) %>%
   arrange(desc(tot_time))%>%
   ggplot(., aes(x=neighborhood, y=tot_time))+
-  geom_bar(stat='identity', fill='#ea4524') +
-  labs(y="Time Spent (Hours)", x="Neighborhood")
+  geom_bar(stat='identity', fill='#c40001') +
+  labs(y="Time Spent (Hours)", x="Neighborhood") +
+  ggtitle("Top 10 Neighborhood Flight Times- May 2020")
