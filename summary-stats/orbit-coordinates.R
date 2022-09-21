@@ -47,8 +47,12 @@ flights_of_interest <- monthly_data %>%
 ####      ever_orbiting (boolean/logical): Did the total rotation of the helicopter ever reach orbit_threshold?
 ####      is_orbiting (boolean/logical): Is the helicopter as orbiting or not at the given timestamp for the given flight?
 
+#maybe fix the sign here
+#d <- function(x1, y1, x2, y2) sqrt((x1-x2)^2 +(y1-y2)^2)
 
-d <- function(x1, y1, x2, y2) sqrt((x1-x2)^2 +(y1-y2)^2)
+#multiply square root by the sign so it's +/-
+d <- function(x1, y1, x2, y2) sign(x1-x2)*sqrt((x1-x2)^2 +(y1-y2)^2)
+
 
 law_of_cosines <- function(prev_lat, prev_lon, lat, lon, next_lat, next_lon) {
   c <- d(next_lat, next_lon, prev_lat, prev_lon)
@@ -201,8 +205,8 @@ determine_orbit_positions <- function(monthly_data,
           min_rot = orbit_threshold)
 }
 
-orbit_results <- determine_orbit_positions(monthly_data, minute_range = 5, orbit_threshold = 720)
-write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-30min2turns.csv")
+orbit_results <- determine_orbit_positions(monthly_data, minute_range = 15, orbit_threshold = 880)
+write_csv(orbit_results, "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/May2020-niteorbits-30min2turns-2.csv")
 
 
 
