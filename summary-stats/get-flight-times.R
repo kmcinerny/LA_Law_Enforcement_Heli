@@ -5,13 +5,17 @@ library(lubridate)
 pos10.19 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19.csv")
 pos12.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/12.19/pos12.19_df.csv")
 
+
+
+
 pos6.20_df <- pos6.20_df %>%
 # Fix the issue with naming--from Oct to May
-mutate_at("flight_id",
-str_replace,
-pattern = "Jul",
-replacement = "Jun") %>%
-# Arrange the rows first by flight_id, then by time stamp (earliest to latest)
+# mutate_at("flight_id",
+# str_replace,
+# pattern = "Jul",
+# replacement = "Jun") %>%
+
+## Arrange the rows first by flight_id, then by time stamp (earliest to latest)
 ## Time stamp arranged within each flight_id
 arrange(flight_id, timestamp)
 
