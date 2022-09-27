@@ -3,7 +3,7 @@ library(tidyverse)
 library(jsonlite)
 
 # Read in the JSON file
-flight10.19_json <- read_json("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/json/pretty-202005.json", simplifyVector = TRUE)
+flight5.20_json <- read_json("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/json/pretty-202005.json", simplifyVector = TRUE)
 
 # Extract the flight data frame (one observation per flight)
 flight5.20_df <- flight5.20_json$flights %>% as_tibble() # making a data frame with just flights & nested positions
@@ -61,4 +61,4 @@ pos5.20_df <- full_join(flight5.20_num, pos5.20_df, by = "flight_id")
 
 write.csv(pos5.20_df, file = "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/5.20/pos5.20_df.csv")
 
-
+write.csv(flight5.20_df, file = "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/5.20/mayflights.csv")

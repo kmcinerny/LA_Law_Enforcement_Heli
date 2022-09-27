@@ -4,7 +4,7 @@ library(lubridate)
 library(tictoc)
 
 # Read in the position CSV file 
-pos2.20_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/pos2.20_df.csv")
+pos2.20_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/2.20/pos2.20_df.csv")
 
 
 findOutliers <- function(flight, df, ascent_rate = 1600) {
@@ -59,13 +59,13 @@ all_outliers <- map(unique(pos2.20_df$flight_id),
                     df = pos2.20_df,
                     ascent_rate = 2500)
 toc()
-pos2.20_outliers <- pos2.20_df %>% mutate(is_outlier = unlist(all_outliers))
+positions202002 <- pos2.20_df %>% mutate(is_outlier = unlist(all_outliers))
 
-write.csv(pos2.20_outliers, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos2.20_outliers.csv") 
+write.csv(pos2.20_df, file= "Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/pos2.20_outliers.csv") 
 
 
 # find how many are outliers
-mean(pos2.20_outliers$is_outlier=="TRUE")
+mean(pos2.20_df$is_outlier=="TRUE")
 
 
 # exclude outlier altitudes
