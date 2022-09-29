@@ -7,6 +7,39 @@ pos12.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/12
 
 
 
+fileNames <- Sys.glob("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions/*.csv")
+all_months_df = data.frame()
+for (fileName in fileNames) {
+    month_df <- read.csv(fileName) {
+        arrange(flight_id, timestamp)
+        temp_df <- get_tail_time <- function(month_df) {
+            tail_time <- month_df %>%
+                # Group by flight_id
+                group_by(flight_id) %>%
+                # Calculate the flight time for each flight in seconds and minutes
+                summarise(time_sec = as.numeric(as.duration(diff(range(timestamp))))) %>%
+                mutate(time_hrs = time_sec / 3600) %>%
+                ungroup() %>%
+                # Join summary table with tail number
+                left_join(month_df %>% select(flight_id, aircraftRegistration)%>%
+                              distinct(),
+                          on = 'flight_id') %>%
+                # Group by tail number
+                group_by(aircraftRegistration) %>%
+                # Calculate the total time (minutes) by flight number
+                # Can change time_min to time_sec if you want seconds
+                summarise(total_time = sum(time_hrs)) %>%
+                # Add the year-month as an ID column
+                mutate(month = month_df %>%
+                           slice(1) %>%
+                           pull(flight_id) %>%
+                           str_extract('\\d{4}-[A-Za-z]+(?=-)')) %>%
+                ungroup()
+        }
+    }
+    all_months_df <- all_months_df %>% rbind(temp_df)
+}
+
 
 pos6.20_df <- pos6.20_df %>%
 # Fix the issue with naming--from Oct to May
