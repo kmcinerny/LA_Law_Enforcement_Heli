@@ -10,7 +10,7 @@ pos12.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/12
 fileNames <- Sys.glob("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions/*.csv")
 all_months_df = data.frame()
 for (fileName in fileNames) {
-    month_df <- read.csv(fileName) {
+    month_df <- read.csv(fileName)
         arrange(flight_id, timestamp)
         temp_df <- get_tail_time <- function(month_df) {
             tail_time <- month_df %>%
@@ -35,7 +35,6 @@ for (fileName in fileNames) {
                            pull(flight_id) %>%
                            str_extract('\\d{4}-[A-Za-z]+(?=-)')) %>%
                 ungroup()
-        }
     }
     all_months_df <- all_months_df %>% rbind(temp_df)
 }
