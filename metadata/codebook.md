@@ -3,7 +3,7 @@ https://www.radarbox.com/api/documentation#operation/search
 
 ## Structure
 Each month of data contains a set of flights with several variables about the flight as a whole, 
-as well as nested position data, with its own set of variables for the "sequence of flight path positions" taken every few seconds.
+as well as nested position data, with its own set of variables for the flight's positions taken every few seconds.
 The majority of our analysis is based on the nested position data. We joined a couple of the variables, including flight_id (which we created) and aircraftRegistration (which came from the overarching flight data), to the positions data.
 
 ## Variables in Position Data
