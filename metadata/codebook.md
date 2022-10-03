@@ -1,6 +1,8 @@
 ## Data Source
 https://www.radarbox.com/api/documentation#operation/search  
-Scroll down to "Responses" / click on "flights" to open array of flights / scroll down and click on "positions" to open array of positions
+- Scroll down to "Responses" 
+- Click on "flights" to open array of flights 
+- Within flights, scroll and click on "positions" to open array of positions
 
 ## Structure
 Each month of data contains a set of flights with several variables about the flight as a whole, 
