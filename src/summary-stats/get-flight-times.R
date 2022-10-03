@@ -5,14 +5,21 @@ library(lubridate)
 pos10.19 <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/10.19/pos10.19.csv")
 pos12.19_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/12.19/pos12.19_df.csv")
 
+# this shows that fileName does include all of those files read in
+fileNames <- Sys.glob("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions/*.csv")
+for (fileName in fileNames) {
+    print(fileName)
+    month_df <- read.csv(fileName)
+    print(head(month_df))
+}
 
-
+# this is where I run into an issue.. maybe with the function
 fileNames <- Sys.glob("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions/*.csv")
 all_months_df = data.frame()
 for (fileName in fileNames) {
-    month_df <- read.csv(fileName)
-        arrange(flight_id, timestamp)
-        temp_df <- get_tail_time <- function(month_df) {
+    month_df <- read.csv(fileName) %>%
+        arrange(flight_id, timestamp) 
+        temp_df<- get_tail_time <- function(month_df) {
             tail_time <- month_df %>%
                 # Group by flight_id
                 group_by(flight_id) %>%
@@ -38,7 +45,6 @@ for (fileName in fileNames) {
     }
     all_months_df <- all_months_df %>% rbind(temp_df)
 }
-
 
 pos6.20_df <- pos6.20_df %>%
 # Fix the issue with naming--from Oct to May
