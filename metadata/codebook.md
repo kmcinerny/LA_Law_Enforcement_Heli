@@ -1,5 +1,5 @@
 ## Data Source
-https://www.radarbox.com/api/documentation#operation/search |
+https://www.radarbox.com/api/documentation#operation/search  
 Scroll down to "Responses" / click on "flights" to open array of flights / scroll down and click on "positions" to open array of positions
 
 ## Structure
