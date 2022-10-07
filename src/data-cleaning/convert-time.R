@@ -1,34 +1,33 @@
-
+rm(list = ls())
 library(lubridate) #to separate date/time
 
 
-
-## May 2020
-
 # load data 
-pos5.20_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/pos5.20_df.csv")
+positions_df <- read_csv("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions/positions_df.csv")
 
-# convert timestamp to PST
-pos5.20_df$timestamp <- with_tz(ymd_hms(pos5.20_df$timestamp))
+fileNames <- Sys.glob("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions-3/*.csv")
+# define empty dataset with timezone
+positions3_df_tz <- data.frame()
+for (fileName in fileNames) {
+  positions3_df <- read.csv(fileName)
+  positions3_df$timestamp <- with_tz(ymd_hms(positions3_df$timestamp))
+  # then fill dataset with these conversions
+  positions3_df_tz <- dplyr::bind_rows(positions3_df_tz, positions3_df)
+}
 
-write.csv(pos5.20_df, file= "/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/csv/5.20/pos5.20_df.csv")
 
-# convert flight time to PST
+# convert positions timestamp to pacific
+positions_df$timestamp <- with_tz(ymd_hms(positions_df$timestamp))
 
-flight5.20_df <- read_csv("/Users/katemcinerny/Documents/UCLA/Carceral_ecologies/heli_data/data/CSV/5.20/mayflights.csv")
+write.csv(positions_df, file= "/Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/positions/positions_df")
+
+
+# convert flight time to pacific
+flights_df <- read_csv("/Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/flights/flights_df.csv")
 
 # converting timezone of when flight was created
-flight5.20_df$created <- with_tz(ymd_hms(flight5.20_df$created))
+flights_df$created <- with_tz(ymd_hms(flights_df$created))
 
 # converting timezone of when flight updated
-flight5.20_df$updated <- with_tz(ymd_hms(flight5.20_df$updated))
+flights_df$updated <- with_tz(ymd_hms(flights_df$updated))
 
-# separate date-time-hr
-#d <- as.POSIXct(flights11.19_hood$PSTtimestamp, format="%Y-%m-%d %H:%M:%S")
-#flights11.19_hood$date_pos <- format(d, format="%Y-%m-%d")
-#flights11.19_hood$time_pos <- format(d, format="%H:%M:%S")
-#flights11.19_hood$hr_pos <- format(d, format="%H")
-
-
-# convert from string to numeric
-#flights11.19_hood$hr_pos_num <- as.numeric(flights11.19_hood$hr_pos)
