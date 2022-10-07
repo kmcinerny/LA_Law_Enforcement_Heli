@@ -7,16 +7,11 @@ library(jsonlite)
 fileNames <- Sys.glob ("Documents/UCLA/Carceral_ecologies/heli-analysis/heli-data/raw/*.json")
 flight_df <- data.frame()
 for (fileName in fileNames) {
-  print(fileName)
   flight_json <- read_json(fileName, simplifyVector = TRUE)
+  # Extract the flight data frame (one observation per flight)
   flight_temp <- flight_json$flights %>% as_tibble() # making a data frame with just flights & nested positions
   flight_df <- dplyr::bind_rows(flight_df, flight_temp)
-  
 }
-
-
-# Extract the flight data frame (one observation per flight)
-#flight_df <- flight_json$flights %>% as_tibble() # making a data frame with just flights & nested positions
 
 # list tail numbers alphabetically
 sort(unique(flight_df$aircraftRegistration))
