@@ -21,5 +21,5 @@ The majority of our analysis is based on the nested position data. We joined a c
 | latitude | lat | decimal |
 | longitude | lon | decimal |
 | source | source of the position data | string |
-| timestamp | time the position was recorded (UTC converted to pacific time) | date-time |
+| timestamp | time the position was recorded (UTC converted to pacific time) | POSIXct |
 | verticalRate | vertical rate (ft/min) | integer |
