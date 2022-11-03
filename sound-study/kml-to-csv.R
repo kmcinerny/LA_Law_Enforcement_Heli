@@ -8,7 +8,7 @@ kml_to_csv <- function(filePath, type) {#filePath = full path to the kml file, t
   
   # Determine the layer name from the kml file.
   a <- readLines(filePath)
-  layerLine <- which(grepl("<Folder>", a)) + 1
+  layerLine <- which(grepl("<Document>", a)) + 1
   layer <- strsplit(strsplit(a[layerLine], ">")[[1]][2], "<")[[1]][1]
   
   # Create a new directory to contain the results.
@@ -72,3 +72,60 @@ doc <- read_xml("Documents/UCLA/Carceral_ecologies/heli-analysis/sound-data/soun
 style <- read_xml()
 
 
+
+install.packages("qdap")
+library(qdap)
+
+install.packages("devtools")
+
+
+packages = installed.packages()
+packages = packages[, "Package"]
+if (!"devtools" %in% packages) {
+  install.packages("devtools")
+}
+
+install.packages("cli")
+library(cli)
+
+devtools::install_github("hadley/devtools")
+
+library(devtools)
+install_github("qdapDictionaries", "trinker")
+install_github("qdapRegex", "trinker")
+install_github("qdapTools", "trinker")
+install_github("qdap", "trinker")
+
+
+library(devtools)
+install_github("trinker/qdapDictionaries")
+install_github("trinker/qdapRegex")
+install_github("trinker/qdapTools")
+install_github("trinker/qdap")
+
+library(qdap)
+
+install.packages("rJava")
+library(rJava)
+
+dat = "Documents/UCLA/Carceral_ecologies/heli-analysis/sound-data/sound-flight-trajectories/011_trajectory_N223LA_58CA_20220927.kml"
+
+x <- unlist(genXtract(dat, "<when>", "</when>"))
+y <- unlist(genXtract(dat, "<gx:coord>", "</gx:coord>"))
+
+x[sapply(x, function(x) !identical(x, character(0)))]
+y[sapply(y, function(x) !identical(x, character(0)))]
+
+
+
+
+
+# third way
+install.packages("sf")
+library(sf)
+
+kml <- st_read("Documents/UCLA/Carceral_ecologies/heli-analysis/sound-data/sound-flight-trajectories/011_trajectory_N223LA_58CA_20220927.kml")
+
+kml_df <- as.data.frame(kml)
+
+write.csv()
